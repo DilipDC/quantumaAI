@@ -1,40 +1,45 @@
-
 async function sendMessage(){
 
 const input = document.getElementById("promptInput")
-const msg = input.value.trim()
+const message = input.value.trim()
 
-if(!msg) return
+if(!message) return
 
-const chat = document.getElementById("chatBox")
+const chatBox = document.getElementById("chatBox")
 
-const user = document.createElement("div")
-user.className="user"
-user.innerText=msg
-chat.appendChild(user)
+// user message
+const userMsg = document.createElement("div")
+userMsg.className = "user"
+userMsg.innerText = message
+chatBox.appendChild(userMsg)
 
-input.value=""
+input.value = ""
 
-const ai = document.createElement("div")
-ai.className="ai"
-ai.innerText="Thinking..."
-chat.appendChild(ai)
+// AI loading message
+const aiMsg = document.createElement("div")
+aiMsg.className = "ai"
+aiMsg.innerText = "Thinking..."
+chatBox.appendChild(aiMsg)
 
-chat.scrollTop = chat.scrollHeight
+chatBox.scrollTop = chatBox.scrollHeight
+
+try{
 
 const res = await fetch("/api/process/",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({prompt:msg})
+body:JSON.stringify({prompt:message})
 })
 
 const data = await res.json()
 
-ai.innerText=data.response
+aiMsg.innerText = data.response
 
-chat.scrollTop = chat.scrollHeight
+}catch(error){
+
+aiMsg.innerText = "Error connecting to AI"
+
 }
 
-function newChat(){
-document.getElementById("chatBox").innerHTML='<div class="ai">New chat started.</div>'
+chatBox.scrollTop = chatBox.scrollHeight
 }
