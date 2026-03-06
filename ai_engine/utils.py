@@ -1,9 +1,12 @@
-
-import requests, json, os
+import requests
+import json
+import os
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 def get_quantum_response(prompt):
+
+    url = "https://openrouter.ai/api/v1/chat/completions"
 
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
@@ -11,21 +14,22 @@ def get_quantum_response(prompt):
     }
 
     data = {
-        "model": "google/gemini-2.0-flash-001",
+        "model": "deepseek/deepseek-chat",
         "messages": [
-            {"role":"user","content":prompt}
+            {"role": "user", "content": prompt}
         ]
     }
 
     try:
-        r = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers=headers,
-            data=json.dumps(data)
-        )
-
+        r = requests.post(url, headers=headers, data=json.dumps(data))
         response = r.json()
-        return response["choices"][0]["message"]["content"]
+
+        print(response)  # debug
+
+        if "choices" in response:
+            return response["choices"][0]["message"]["content"]
+
+        return "AI returned unexpected response."
 
     except Exception as e:
-        return f"AI connection error: {str(e)}"
+        return f"Error connecting to AI: {str(e)}"
