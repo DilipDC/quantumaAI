@@ -1,50 +1,37 @@
 
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
 
-{% block content %}
+<title>QuantumAI | DILIP DC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<div style="padding:40px">
+<link rel="stylesheet" href="/static/css/style.css">
 
-<h2>QuantumAI Terminal</h2>
+</head>
 
-<textarea id="promptInput" style="width:100%;height:120px"></textarea>
+<body>
 
-<br><br>
+<div class="sidebar">
+<h2>⚡ QuantumAI</h2>
+<p>by DILIP DC</p>
+<button onclick="newChat()">New Chat</button>
+</div>
 
-<label>Deep Research</label>
-<input type="checkbox" id="deepToggle">
+<div class="main">
 
-<button onclick="runAI()">EXECUTE</button>
+<div id="chatBox" class="chat-box">
+<div class="ai">Welcome to QuantumAI. Ask anything.</div>
+</div>
 
-<pre id="codeDisplay"></pre>
-
-<iframe id="previewFrame" style="width:100%;height:400px;background:white"></iframe>
+<div class="input-bar">
+<textarea id="promptInput" placeholder="Send a message..."></textarea>
+<button onclick="sendMessage()">Send</button>
+</div>
 
 </div>
 
-<script>
+<script src="/static/js/chat.js"></script>
 
-async function runAI(){
-
-const prompt=document.getElementById("promptInput").value
-const deep=document.getElementById("deepToggle").checked
-
-const r=await fetch("/api/process/",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({prompt:prompt,mode:deep})
-})
-
-const data=await r.json()
-
-document.getElementById("codeDisplay").innerText=data.response
-
-if(data.response.includes("<html")){
-document.getElementById("previewFrame").srcdoc=data.response
-}
-
-}
-
-</script>
-
-{% endblock %}
+</body>
+</html>
