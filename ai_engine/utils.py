@@ -1,8 +1,9 @@
+import requests
+import json
+import os
 
-import requests, json
-
-# 🔑 PUT YOUR OPENROUTER API KEY HERE
-OPENROUTER_API_KEY = "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"
+# Get API key from Render Environment Variables
+OPENROUTER_API_KEY = os.getenv("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")
 
 def get_quantum_response(prompt, deep_mode=False):
 
@@ -30,7 +31,8 @@ def get_quantum_response(prompt, deep_mode=False):
             data=json.dumps(data)
         )
 
-        return r.json()['choices'][0]['message']['content']
+        response = r.json()
+        return response["choices"][0]["message"]["content"]
 
     except Exception as e:
-        return str(e)
+        return f"Error connecting to AI: {str(e)}"
