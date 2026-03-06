@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="padding:40px">
+
+<h2>QuantumAI Terminal</h2>
+
+<textarea id="promptInput" style="width:100%;height:120px"></textarea>
+
+<br><br>
+
+<label>Deep Research</label>
+<input type="checkbox" id="deepToggle">
+
+<button onclick="runAI()">EXECUTE</button>
+
+<pre id="codeDisplay"></pre>
+
+<iframe id="previewFrame" style="width:100%;height:400px;background:white"></iframe>
+
+</div>
+
+<script>
+
+async function runAI(){
+
+const prompt=document.getElementById("promptInput").value
+const deep=document.getElementById("deepToggle").checked
+
+const r=await fetch("/api/process/",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({prompt:prompt,mode:deep})
+})
+
+const data=await r.json()
+
+document.getElementById("codeDisplay").innerText=data.response
+
+if(data.response.includes("<html")){
+document.getElementById("previewFrame").srcdoc=data.response
+}
+
+}
+
+</script>
+
+{% endblock %}
