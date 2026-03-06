@@ -1,7 +1,7 @@
 
 import requests, json, os
 
-OPENROUTER_API_KEY = os.getenv("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")
+OPENROUTER_API_KEY = os.getenv("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")
 
 def get_quantum_response(prompt):
 
